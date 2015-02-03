@@ -1,0 +1,30 @@
+.Sortable {
+  position: relative;
+  display: block;
+  overflow: visible;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+
+.SortableItem {
+  cursor: move;
+}
+
+.SortableItem.is-dragging {
+  position: absolute;
+  z-index: 1688;
+}
+
+.SortableItem.is-undraggable {
+  cursor: not-allowed;
+}
+
+.SortableItem--placeholder {
+  display: none;
+}
+
+.SortableItem--placeholder.is-active {
+  display: block;
+  z-index: -1;
+}
