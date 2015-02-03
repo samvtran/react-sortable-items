@@ -19,9 +19,6 @@
     "url": "https://github.com/samvtran/react-sortable-items/issues"
   },
   "homepage": "https://github.com/samvtran/react-sortable-items",
-  "dependencies": {
-    "react": "^0.12.2"
-  },
   "devDependencies": {
     "css-loader": "^0.9.1",
     "del": "^1.1.1",
