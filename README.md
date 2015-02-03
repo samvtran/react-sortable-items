@@ -10,12 +10,13 @@ To run the examples, run `gulp` in the respective example directories and open i
 var React = require('react');
 var Sortable = require('react-sortable-items');
 var SortableMixin = require('react-sortable-items/SortableItemMixin');
+var style = require('style.css'); // If you're using webpack or Browserify
 
 var Item = React.createClass({
-	propTypes: { title: React.PropTypes.string.isRequired }
+	propTypes: { title: React.PropTypes.string.isRequired },
 	mixins: [SortableMixin],
 	render: function() {
-		return this.renderWithSortable(<div>{this.title}</div>)
+		return this.renderWithSortable(<div>{this.props.title}</div>)
 	}
 });
 
@@ -29,13 +30,13 @@ var List = React.createClass({
 		this.setState({
 			items: reorder.map(function (idx) {
 				return this.state.items[idx];
-			}.bind(this));
+			}.bind(this))
 		});
 	},
 	render: function() {
 		var items = this.state.items.map(function (item, idx) {
 			return <Item title={item} key={idx} sortData={idx} isDraggable={true} />;
-		}.bind(this);
+		}.bind(this));
 
 		return (
 			<div>
