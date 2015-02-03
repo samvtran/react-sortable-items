@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/samvtran/react-sortable-items",
   "dependencies": {
-    "immutable": "^3.6.2",
     "react": "^0.12.2"
   },
   "devDependencies": {

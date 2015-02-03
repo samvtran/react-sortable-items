@@ -6,7 +6,6 @@
 var React = require('react/addons');
 var cx = React.addons.classSet;
 var CloneWithProps = React.addons.cloneWithProps;
-var Immutable = require('immutable');
 
 module.exports = React.createClass({
   propTypes: {
