@@ -4,13 +4,15 @@ Sort stuff with React.js
 Based on [jasonslyvia/react-anything-sortable](https://github.com/jasonslyvia/react-anything-sortable) but without jQuery.
 
 # Usage
+You can install react-sortable items with `npm i react-sortable-items` and include it using webpack, Browserify, etc. If you're having trouble, Gulpfiles using webpack are included in the examples directory.
+
 To run the examples, run `gulp` in the respective example directories and open index.html in your favorite browser.
 
 ```javascript
 var React = require('react');
 var Sortable = require('react-sortable-items');
 var SortableMixin = require('react-sortable-items/SortableItemMixin');
-var style = require('style.css'); // If you're using webpack or Browserify
+var style = require('react-sortable-items/style.css'); // If you're using webpack or Browserify
 
 var Item = React.createClass({
 	propTypes: { title: React.PropTypes.string.isRequired },
@@ -53,11 +55,12 @@ React.render(<List />, document.getElementById('boourns'));
 
 ```
 
+# Notes
 The `isDraggable` property on sortable items lets you selectively disable sorting if, for example, there's invalid data.
 
 Putting the `is-isolated` class on any element in a sortable item will keep it from ever triggering a sort.
 
-Use `sortData` on items to pass data through to the `onSort` callback.
+Use the `sortData` property on sortable items to pass data through to the `onSort` callback.
 
 # TODO
 - [ ] Horizontal sorting
