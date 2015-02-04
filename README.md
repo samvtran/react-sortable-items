@@ -4,7 +4,7 @@ Sort stuff with React.js
 Based on [jasonslyvia/react-anything-sortable](https://github.com/jasonslyvia/react-anything-sortable) but without jQuery.
 
 # Usage
-You can install react-sortable items with `npm i react-sortable-items` and include it using webpack, Browserify, etc. If you're having trouble, Gulpfiles using webpack are included in the examples directory.
+You can install react-sortable-items with `npm i react-sortable-items` and include it using webpack, Browserify, etc. If you're having trouble, Gulpfiles using webpack are included in the examples directory.
 
 To run the examples, run `gulp` in the respective example directories and open index.html in your favorite browser.
 
@@ -63,8 +63,9 @@ Property | Description
 -----|-----
 onSort | Callback that returns sorted array of data from `sortData`.
 horizontal | Default false. Whether to sort horizontally.
-floatUndraggables | Default false. Whether to only allow sorting below items with isDraggable set to true, sending undraggable items to the top of the list over time.
-sinkUndraggables | Default false. Whether to only allow sorting above items with isDraggable set to true, sending undraggable items to the bottom of the list over time.
+floatUndraggables | Default false. Whether to only allow sorting below items with isDraggable set to false, sending undraggable items to the top of the list over time.
+sinkUndraggables | Default false. Whether to only allow sorting above items with isDraggable set to false, sending undraggable items to the bottom of the list over time.
+
 
 On components with `SortableItemMixin`:
 
@@ -84,4 +85,3 @@ The `is-isolated` class can also be set on any elements inside a sortable item t
 - [x] CSS
 - [x] Examples
 - [ ] Tests
-
