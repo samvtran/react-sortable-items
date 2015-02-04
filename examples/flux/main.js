@@ -1,14 +1,18 @@
 'use strict';
 
-var Sortable = require('Sortable');
-var sortableMixin = require('SortableItemMixin');
+var Sortable = require('react-sortable-items');
+var sortableMixin = require('react-sortable-items/SortableItemMixin');
 var React = require('react');
-var style = require('style.css');
+var style = require('react-sortable-items/style.css');
 var ItemStore = require('./ItemStore');
 var Reflux = require('reflux');
 var ItemActions = require('./ItemActions');
 var ItemRecord = require('./ItemRecord');
 
+/**
+  Attempting to modify text in the middle of the input box makes the cursor jump, but you get the gist of it.
+  https://github.com/spoike/refluxjs/issues/43
+*/
 var Item = React.createClass({
   mixins: [sortableMixin],
   propTypes: {

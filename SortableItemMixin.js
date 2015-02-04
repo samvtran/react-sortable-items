@@ -4,6 +4,7 @@
 'use strict';
 
 var React = require('react/addons');
+var cx = React.addons.classSet;
 
 /**
  * Elements with 'is-isolated' in the class list will not trigger on mouse down events.
@@ -11,7 +12,7 @@ var React = require('react/addons');
 module.exports = {
   getDefaultProps: function(){
     return {
-      sortableClassName: '',
+      sortableClassNames: {},
       sortableStyle: {},
       onSortableItemMount: function(){},
       onSortableItemMouseDown: function(){},
@@ -53,8 +54,10 @@ module.exports = {
   },
 
   renderWithSortable: function(item){
+    var classNames = this.props.sortableClassNames;
+    if (!this.props.isDraggable) classNames['is-undraggable'] = true;
     return React.addons.cloneWithProps(item, {
-      className: this.props.sortableClassName,
+      className: cx(classNames),
       style: this.props.sortableStyle,
       key: this.props.sortableIndex,
       onMouseDown: this.handleSortableItemMouseDown

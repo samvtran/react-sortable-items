@@ -34,14 +34,16 @@ var Item = React.createClass({
 var SimpleSortable = React.createClass({
   getDefaultProps: function() {
     return {
-      horizontal: false
+      horizontal: false,
+      sinkUndraggables: false,
+      floatUndraggables: false
     }
   },
   getInitialState: function() {
     return {
       items: [
         "Item 1",
-        "Item 2",
+        "Item 2 (unsortable, will " + (this.props.sinkUndraggables ? 'sink to the bottom)' : 'float to the top)'),
         "Item 3",
         "Item 4",
         "Item 5"
@@ -70,7 +72,7 @@ var SimpleSortable = React.createClass({
       }
       return <Item key={idx}
                    index={idx}
-                   isDraggable={true}
+                   isDraggable={item.indexOf("Item 2") === -1}
                    title={item}
                    style={style}
                    sortData={idx}
@@ -78,7 +80,8 @@ var SimpleSortable = React.createClass({
     }.bind(this));
     return (
       <div>
-        <Sortable onSort={this.handleSort} horizontal={this.props.horizontal}>
+        <Sortable onSort={this.handleSort} horizontal={this.props.horizontal}
+          floatUndraggables={this.props.floatUndraggables} sinkUndraggables={this.props.sinkUndraggables}>
           {items}
         </Sortable>
       </div>
@@ -86,5 +89,5 @@ var SimpleSortable = React.createClass({
   }
 });
 
-React.render(<SimpleSortable />, document.getElementById('Example'));
-React.render(<SimpleSortable horizontal={true} />, document.getElementById('HorizontalExample'));
+React.render(<SimpleSortable sinkUndraggables={true} />, document.getElementById('Example'));
+React.render(<SimpleSortable floatUndraggables={true} />, document.getElementById('HorizontalExample'));

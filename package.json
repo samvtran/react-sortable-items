@@ -1,6 +1,6 @@
 {
   "name": "react-sortable-items",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Sort stuff with React.js",
   "main": "Sortable.js",
   "scripts": {

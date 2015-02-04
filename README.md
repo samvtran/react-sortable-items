@@ -38,7 +38,7 @@ var List = React.createClass({
 	render: function() {
 		var items = this.state.items.map(function (item, idx) {
 			return <Item title={item} key={idx} sortData={idx} isDraggable={true} />;
-		}.bind(this));
+		});
 
 		return (
 			<div>
@@ -55,17 +55,33 @@ React.render(<List />, document.getElementById('boourns'));
 
 ```
 
-# Notes
-The `isDraggable` property on sortable items lets you selectively disable sorting if, for example, there's invalid data.
+# Configuration
 
-Putting the `is-isolated` class on any element in a sortable item will keep it from ever triggering a sort.
+On `<Sortable />`:
 
-Use the `sortData` property on sortable items to pass data through to the `onSort` callback.
+Property | Description
+-----|-----
+onSort | Callback that returns sorted array of data from `sortData`.
+horizontal | Default false. Whether to sort horizontally.
+floatUndraggables | Default false. Whether to only allow sorting below items with isDraggable set to true, sending undraggable items to the top of the list over time.
+sinkUndraggables | Default false. Whether to only allow sorting above items with isDraggable set to true, sending undraggable items to the bottom of the list over time.
+
+On components with `SortableItemMixin`:
+
+Property | Description
+-----|-----------
+isDraggable | Default true. Whether the item can be dragged.
+sortData | Any data added here will be sent to the `onSort` callback on Sortable in the correct resorted order.
+style | Send any inline styles to the final component
+
+The `is-isolated` class can also be set on any elements inside a sortable item to prevent them from accidentally triggering a sort.
 
 # TODO
-- [ ] Horizontal sorting
+- [x] Horizontal sorting
+- [ ] Grid sorting
 - [ ] Optional classnames if you're not using [SUIT CSS](http://suitcss.github.io/)
 - [x] npm
 - [x] CSS
 - [x] Examples
 - [ ] Tests
+

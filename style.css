@@ -19,12 +19,3 @@
 .SortableItem.is-undraggable {
   cursor: not-allowed;
 }
-
-.SortableItem--placeholder {
-  display: none;
-}
-
-.SortableItem--placeholder.is-active {
-  display: block;
-  z-index: -1;
-}

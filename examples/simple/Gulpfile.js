@@ -8,6 +8,10 @@ var del = require('del');
 var conf = {
   context: __dirname,
   resolve: {
+    alias: {
+      'react-sortable-items$': __dirname + '/../../Sortable',
+      'react-sortable-items': __dirname + '/../..'
+    },
     extensions: ['', '.js'],
     root: [
       path.join(__dirname, '../..')

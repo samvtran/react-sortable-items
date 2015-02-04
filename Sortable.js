@@ -9,14 +9,29 @@ var CloneWithProps = React.addons.cloneWithProps;
 
 module.exports = React.createClass({
   propTypes: {
-    onSort: React.PropTypes.func
+    onSort: React.PropTypes.func,
+    horizontal: React.PropTypes.bool,
+    /**
+      If a sortable item has isDraggable set to false, prevent sorting below the item.
+      This is most useful if items are pinned at the bottom until validated.
+      Note that anything below an undraggable element can be moved above it.
+      This option takes precedence over floatUndraggables if both are set to true.
+    */
+    sinkUndraggables: React.PropTypes.bool,
+    /**
+      See sinkUndraggables. This won't allow sorting above undraggable items.
+      This defers to sinkUndraggables if both are set to true.
+    */
+    floatUndraggables: React.PropTypes.bool
   },
   getDefaultProps: function() {
     return {
-      onSort: function() {}
+      onSort: function() {},
+      horizontal: false,
+      sinkUndraggables: false
     }
   },
-  getInitialState: function(){
+  getInitialState: function() {
     this.rerender(this.props.children);
 
     return {
@@ -32,11 +47,16 @@ module.exports = React.createClass({
     }
   },
   rerender: function(children) {
+    this._firstDraggable = 0;
     this._lastDraggable = React.Children.count(children) - 1;
+    var lastDraggableSet = false;
     this._orderArr = [];
     this._dimensionArr = children.map(function(item, idx) {
-      if (!item.props.isDraggable && idx <= this._lastDraggable) {
+      if (this.props.sinkUndraggables && !item.props.isDraggable && idx <= this._lastDraggable && !lastDraggableSet) {
         this._lastDraggable = idx - 1;
+        lastDraggableSet = true;
+      } else if (this.props.floatUndraggables && !item.props.isDraggable && idx >= this._firstDraggable) {
+        this._firstDraggable = idx + 1;
       }
       this._orderArr.push(idx);
       return {}
@@ -67,14 +87,19 @@ module.exports = React.createClass({
   handleMouseMove: function(e){
     var newOffset = this.calculateNewOffset(e);
     var newIndex = this.calculateNewIndex(e);
-    this._draggingIndex = newIndex;
 
-    this.setState({
+    var newState = {
       isDragging: true,
       top: newOffset.top,
-      left: newOffset.left,
-      placeHolderIndex: newIndex
-    });
+      left: newOffset.left
+    };
+
+    if (newIndex !== -1) {
+      this._draggingIndex = newIndex;
+      newState['placeHolderIndex'] = newIndex;
+    }
+
+    this.setState(newState);
 
     this._prevX = e.pageX;
     this._prevY = e.pageY;
@@ -89,9 +114,7 @@ module.exports = React.createClass({
     this._prevY = null;
 
     if (this.state.isDragging) {
-      this._dimensionArr[this.state.placeHolderIndex].isPlaceHolder = false;
-
-      this.props.onSort(this.getSortData());
+        this.props.onSort(this.getSortData());
     }
 
     this.isMounted() && this.setState({
@@ -113,10 +136,9 @@ module.exports = React.createClass({
 
   getIndexByOffset: function(offset, direction){
     if (!offset || !this.isNumeric(offset.top) || !this.isNumeric(offset.left)) {
-      return 0;
+      return -1;
     }
 
-    var _dimensionArr = this._dimensionArr;
     var offsetX = offset.left;
     var offsetY = offset.top;
     var prevIndex = this.state.placeHolderIndex !== null ?
@@ -124,28 +146,62 @@ module.exports = React.createClass({
       this._draggingIndex;
     var newIndex;
 
-    _dimensionArr.every(function(coord, index) {
+    if (this.props.horizontal) {
+      newIndex = this.getHorizontalIndexOffset(offsetX, offsetY, direction);
+    } else {
+      newIndex = this.getVerticalIndexOffset(offsetX, offsetY, direction);
+    }
+
+    return newIndex !== undefined ? newIndex : prevIndex;
+  },
+  getVerticalIndexOffset: function(offsetX, offsetY, direction) {
+    var newIndex;
+    var lastDimens = this._dimensionArr[this._dimensionArr.length - 1];
+    this._dimensionArr.every(function(coord, index) {
       var relativeLeft = offsetX - coord.left;
       var relativeTop = offsetY - coord.top;
-
       if (offsetY < 0) {
         newIndex = 0;
         return false;
-      } else if (offsetY > this.containerHeight) {
-        newIndex = _dimensionArr.length - 1;
+      } else if (offsetY > this.containerHeight || offsetY > (lastDimens.top + lastDimens.height)) {
+        newIndex = this._dimensionArr.length - 1;
         return false;
       } else if (relativeTop < coord.height && relativeLeft < coord.width) {
         if (relativeTop < coord.height / 2 && direction === 'up') {
           newIndex = index;
         } else if (relativeTop > coord.height / 2 && direction === 'down') {
-          newIndex = Math.min(index + 1, _dimensionArr.length - 1);
+          newIndex = Math.min(index + 1, this._dimensionArr.length - 1);
         }
-        return false
+        return false;
       }
       return true;
     }.bind(this));
 
-    return newIndex !== undefined ? newIndex : prevIndex;
+    return newIndex;
+  },
+  getHorizontalIndexOffset: function(offsetX, offsetY, direction) {
+    var newIndex;
+    var lastDimens = this._dimensionArr[this._dimensionArr.length - 1];
+    this._dimensionArr.every(function(coord, index) {
+      var relativeLeft = offsetX - coord.left;
+      var relativeTop = offsetY - coord.top;
+      if (offsetX < 0) {
+        newIndex = 0;
+        return false;
+      } else if (offsetX > this.containerWidth || offsetX > (lastDimens.left + lastDimens.width)) {
+        newIndex = this._dimensionArr.length - 1;
+        return false;
+      } else if (relativeLeft < coord.width) {
+        if (relativeLeft < coord.width / 2 && direction === 'left') {
+          newIndex = index;
+        } else if (relativeLeft > coord.width / 2 && direction === 'right') {
+          newIndex = Math.min(index + 1, this._dimensionArr.length - 1);
+        }
+        return false;
+      }
+      return true;
+    }.bind(this));
+    return newIndex;
   },
   isNumeric: function(val) {
     return !isNaN(parseFloat(val)) && isFinite(val);
@@ -197,15 +253,30 @@ module.exports = React.createClass({
       offset = { left: dragElement.offsetLeft, top: dragElement.offsetTop };
     }
 
-    var direction = this._prevY > e.pageY ? 'up' : 'down';
+    var direction = '';
 
-    var newIndex = this.getIndexByOffset(offset, direction);
-
-    if (newIndex > this._lastDraggable) {
-      newIndex = this._lastDraggable;
+    if (this.props.horizontal) {
+      direction = this._prevX > e.pageX ? 'left' : 'right';
+    } else {
+      direction = this._prevY > e.pageY ? 'up' : 'down';
     }
 
-    if (newIndex !== placeHolderIndex) {
+    var newIndex = this.getIndexByOffset(offset, direction);
+    if (newIndex < this._firstDraggable) {
+      newIndex = this._firstDraggable;
+      if (this._draggingIndex < this._firstDraggable) {
+        newIndex = this._firstDraggable - 1;
+        this._firstDraggable -= 1;
+      }
+    } else if (newIndex > this._lastDraggable) {
+      newIndex = this._lastDraggable;
+      if (this._draggingIndex > this._lastDraggable) {
+        newIndex = this._lastDraggable + 1;
+        this._lastDraggable += 1;
+      }
+    }
+
+    if (newIndex !== -1 && newIndex !== placeHolderIndex) {
       this._dimensionArr = this.swapArrayItemPosition(this._dimensionArr, placeHolderIndex, newIndex);
       this._orderArr = this.swapArrayItemPosition(this._orderArr, placeHolderIndex, newIndex);
     }
@@ -227,18 +298,11 @@ module.exports = React.createClass({
         draggingItem.push(this.renderDraggingItem(item));
       }
 
-      var isPlaceHolder = this._dimensionArr[index].isPlaceHolder;
-      var itemClassName = cx({
-        'SortableItem': true,
-        'SortableItem--placeholder': isPlaceHolder,
-        'is-active': this.state.isDragging && isPlaceHolder
-      });
-
       return CloneWithProps(item, {
         key: index,
-        sortableClassName: itemClassName,
+        sortableClassNames: {SortableItem: true},
         sortableIndex: index,
-        onSortableItemMouseDown: isPlaceHolder ? undefined : function(e) {
+        onSortableItemMouseDown: function(e) {
           this.handleMouseDown(e, index);
         }.bind(this),
         onSortableItemMount: this.handleChildUpdate
@@ -255,7 +319,7 @@ module.exports = React.createClass({
       height: this._dimensionArr[this._draggingIndex].height
     };
     return CloneWithProps(item, {
-      sortableClassName: 'SortableItem is-dragging',
+      sortableClassNames: {'SortableItem': true, 'is-dragging': true},
       key: this._dimensionArr.length,
       sortableStyle: style,
       isDragging: true
