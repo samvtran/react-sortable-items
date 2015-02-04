@@ -9,10 +9,6 @@ var Reflux = require('reflux');
 var ItemActions = require('./ItemActions');
 var ItemRecord = require('./ItemRecord');
 
-/**
-  Attempting to modify text in the middle of the input box makes the cursor jump, but you get the gist of it.
-  https://github.com/spoike/refluxjs/issues/43
-*/
 var Item = React.createClass({
   mixins: [sortableMixin],
   propTypes: {
