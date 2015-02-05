@@ -8,6 +8,7 @@ var cx = React.addons.classSet;
 var CloneWithProps = React.addons.cloneWithProps;
 
 module.exports = React.createClass({
+  displayName: 'Sortable',
   propTypes: {
     onSort: React.PropTypes.func,
     horizontal: React.PropTypes.bool,
