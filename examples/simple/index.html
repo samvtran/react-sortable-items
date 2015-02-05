@@ -4,8 +4,30 @@
   <meta charset="UTF-8">
   <title>react-sortable-items Simple Example</title>
   <style>
+    body {
+      font-family: sans-serif;
+    }
     #Example, #HorizontalExample {
       margin: 16px;
+    }
+    .SortableItem {
+      background: #fff;
+      border: 1px solid #ddd;
+      margin: 6px;
+      padding: 6px;
+    }
+    #HorizontalExample .is-placeholder {
+      display: inline-block;
+    }
+    .SortableItem.is-placeholder {
+      background: #dd4814;
+      vertical-align: top;
+      border: 2px dashed #333;
+    }
+    /* Instead of using placeholder contents, you can also nest your contents in an element
+     and hide it or set its opacity to 0 when it's a placeholder */
+    .SortableItem.is-placeholder .Contents {
+      opacity: 0;
     }
   </style>
 </head>

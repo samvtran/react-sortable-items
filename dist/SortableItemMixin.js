@@ -55,16 +55,18 @@ var SortableItemMixin =
 	 * Elements with 'is-isolated' in the class list will not trigger on mouse down events.
 	 */
 	module.exports = {
-	  getDefaultProps: function(){
+	  getDefaultProps: function() {
 	    return {
-	      sortableClassNames: {},
 	      sortableStyle: {},
 	      onSortableItemMount: function(){},
 	      onSortableItemMouseDown: function(){},
-	      isDraggable: true
+	      isDraggable: true,
+	      // Used by the Sortable component
+	      _isPlaceholder: false,
+	      _isDragging: false
 	    }
 	  },
-	  handleSortableItemMouseDown: function(e){
+	  handleSortableItemMouseDown: function(e) {
 	    var evt = {
 	      pageX: e.pageX,
 	      pageY: e.pageY,
@@ -93,19 +95,24 @@ var SortableItemMixin =
 	  componentDidMount: function(){
 	    this.props.onSortableItemMount(this.getPosition(), this.outerWidth(), this.outerHeight(), this.props.sortableIndex);
 	  },
-
 	  componentDidUpdate: function(){
 	    this.props.onSortableItemMount(this.getPosition(), this.outerWidth(), this.outerHeight(), this.props.sortableIndex);
 	  },
-
 	  renderWithSortable: function(item){
-	    var classNames = this.props.sortableClassNames;
-	    if (!this.props.isDraggable) classNames['is-undraggable'] = true;
-	    return React.addons.cloneWithProps(item, {
-	      className: cx(classNames),
+	    var classNames = cx({
+	      'SortableItem': true,
+	      'is-dragging': this.props._isDragging,
+	      'is-undraggable': !this.props.isDraggable,
+	      'is-placeholder': this.props._isPlaceholder
+	    });
+	    return React.addons.cloneWithProps(
+	      this.props._isPlaceholder && this.getPlaceholderContent && Object.prototype.toString.call(this.getPlaceholderContent) === '[object Function]'
+	        ? this.getPlaceholderContent() : item, {
+	      className: classNames,
 	      style: this.props.sortableStyle,
 	      key: this.props.sortableIndex,
-	      onMouseDown: this.handleSortableItemMouseDown
+	      onMouseDown: this.handleSortableItemMouseDown,
+	      onMouseUp: this.handleSortableItemMouseUp
 	    });
 	  }
 	};

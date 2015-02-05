@@ -10,6 +10,11 @@ module.exports = React.createClass({
   propTypes: {
     onSort: React.PropTypes.func,
     horizontal: React.PropTypes.bool,
+    sensitivity: function(props, propName, componentName) {
+      if (isNaN(parseFloat(props[propName])) && !isFinite(props[propName]) || props[propName] < 0 || props[propName] > 1) {
+        return new Error('sensitivity must be a number from 0 to 1.');
+      }
+    }.bind(this),
     /**
       If a sortable item has isDraggable set to false, prevent sorting below the item.
       This is most useful if items are pinned at the bottom until validated.
@@ -27,7 +32,8 @@ module.exports = React.createClass({
     return {
       onSort: function() {},
       horizontal: false,
-      sinkUndraggables: false
+      sinkUndraggables: false,
+      sensitivity: 0,
     }
   },
   getInitialState: function() {
@@ -62,6 +68,7 @@ module.exports = React.createClass({
     }.bind(this));
   },
   componentDidMount: function(){
+    this._dragDimensions = null;
     this.containerWidth = this.getDOMNode().offsetWidth;
     this.containerHeight = this.getDOMNode().offsetHeight;
   },
@@ -111,6 +118,7 @@ module.exports = React.createClass({
     this._initOffset = null;
     this._prevX = null;
     this._prevY = null;
+    this._dragDimensions = null;
 
     if (this.state.isDragging) {
         this.props.onSort(this.getSortData());
@@ -156,6 +164,7 @@ module.exports = React.createClass({
   getVerticalIndexOffset: function(offsetX, offsetY, direction) {
     var newIndex;
     var lastDimens = this._dimensionArr[this._dimensionArr.length - 1];
+    var buffer = 1 - this.props.sensitivity;
     this._dimensionArr.every(function(coord, index) {
       var relativeLeft = offsetX - coord.left;
       var relativeTop = offsetY - coord.top;
@@ -166,9 +175,9 @@ module.exports = React.createClass({
         newIndex = this._dimensionArr.length - 1;
         return false;
       } else if (relativeTop < coord.height && relativeLeft < coord.width) {
-        if (relativeTop < coord.height / 2 && direction === 'up') {
+        if (relativeTop < ((coord.height / 2) - ((coord.height / 4) * buffer)) && direction === 'up') {
           newIndex = index;
-        } else if (relativeTop > coord.height / 2 && direction === 'down') {
+        } else if (relativeTop > ((coord.height / 2) + ((coord.height / 4) * buffer)) && direction === 'down') {
           newIndex = Math.min(index + 1, this._dimensionArr.length - 1);
         }
         return false;
@@ -181,6 +190,7 @@ module.exports = React.createClass({
   getHorizontalIndexOffset: function(offsetX, offsetY, direction) {
     var newIndex;
     var lastDimens = this._dimensionArr[this._dimensionArr.length - 1];
+    var buffer = 1 - this.props.sensitivity;
     this._dimensionArr.every(function(coord, index) {
       var relativeLeft = offsetX - coord.left;
       var relativeTop = offsetY - coord.top;
@@ -191,9 +201,9 @@ module.exports = React.createClass({
         newIndex = this._dimensionArr.length - 1;
         return false;
       } else if (relativeLeft < coord.width) {
-        if (relativeLeft < coord.width / 2 && direction === 'left') {
+        if (relativeLeft < ((coord.width / 2) - ((coord.width / 4) * buffer)) && direction === 'left') {
           newIndex = index;
-        } else if (relativeLeft > coord.width / 2 && direction === 'right') {
+        } else if (relativeLeft > ((coord.width / 2) + ((coord.width / 4) * buffer)) && direction === 'right') {
           newIndex = Math.min(index + 1, this._dimensionArr.length - 1);
         }
         return false;
@@ -261,13 +271,13 @@ module.exports = React.createClass({
     }
 
     var newIndex = this.getIndexByOffset(offset, direction);
-    if (newIndex < this._firstDraggable) {
+    if (newIndex !== -1 && newIndex < this._firstDraggable) {
       newIndex = this._firstDraggable;
       if (this._draggingIndex < this._firstDraggable) {
         newIndex = this._firstDraggable - 1;
         this._firstDraggable -= 1;
       }
-    } else if (newIndex > this._lastDraggable) {
+    } else if (newIndex !== -1 && newIndex > this._lastDraggable) {
       newIndex = this._lastDraggable;
       if (this._draggingIndex > this._lastDraggable) {
         newIndex = this._lastDraggable + 1;
@@ -294,12 +304,17 @@ module.exports = React.createClass({
     var items = this._orderArr.map(function(itemIndex, index) {
       var item = this.props.children[itemIndex];
       if (index === this._draggingIndex && item.props.isDraggable) {
+        if (this._dragDimensions === null) {
+          this._dragDimensions = {
+            width: this._dimensionArr[this._draggingIndex].width,
+            height: this._dimensionArr[this._draggingIndex].height
+          };
+        }
         draggingItem.push(this.renderDraggingItem(item));
       }
-
       return CloneWithProps(item, {
         key: index,
-        sortableClassNames: {SortableItem: true},
+        _isPlaceholder: index === this.state.placeHolderIndex,
         sortableIndex: index,
         onSortableItemMouseDown: function(e) {
           this.handleMouseDown(e, index);
@@ -314,14 +329,13 @@ module.exports = React.createClass({
     var style = {
       top: this.state.top,
       left: this.state.left,
-      width: this._dimensionArr[this._draggingIndex].width,
-      height: this._dimensionArr[this._draggingIndex].height
+      width: this._dragDimensions.width,
+      height: this._dragDimensions.height
     };
     return CloneWithProps(item, {
-      sortableClassNames: {'SortableItem': true, 'is-dragging': true},
       key: this._dimensionArr.length,
       sortableStyle: style,
-      isDragging: true
+      _isDragging: true
     });
   },
   render: function(){

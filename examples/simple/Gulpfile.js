@@ -9,17 +9,18 @@ var conf = {
   context: __dirname,
   resolve: {
     alias: {
-      'react-sortable-items$': __dirname + '/../../Sortable',
-      'react-sortable-items': __dirname + '/../..'
+      'react-sortable-items$': __dirname + '/../../src/Sortable',
+      'react-sortable-items/style.css': __dirname + '/../../style.css',
+      'react-sortable-items': __dirname + '/../../src'
     },
-    extensions: ['', '.js'],
+    extensions: ['', '.js', '.jsx'],
     root: [
       path.join(__dirname, '../..')
     ]
   },
   module: {
     loaders: [
-      { test: /\.js$/, loader: 'jsx-loader?insertPragma=React.DOM' },
+      { test: /\.js(x)?/, loader: 'jsx-loader?insertPragma=React.DOM' },
       {
         test: /\.css$/,
         loader: "style!css"

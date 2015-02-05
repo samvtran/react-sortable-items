@@ -14,18 +14,23 @@ var Item = React.createClass({
   },
   getDefaultProps: function() {
     return {
-      style: { border: '1px solid #ddd' }
+      style: {}
     }
   },
   handleRemove: function(e) {
     e.preventDefault();
     this.props.handleRemoval(this.props.index);
   },
+  getPlaceholderContent: function() {
+    return <div><h4>This is a placeholder!</h4></div>;
+  },
   render: function() {
     return this.renderWithSortable(
       <div style={this.props.style}>
-        <h4>{this.props.title}</h4>
-        <a href="#" onClick={this.handleRemove} className="is-isolated">Delete (isolated)</a>
+        <div className="Contents">
+          <h4>{this.props.title}</h4>
+          <a href="#" onClick={this.handleRemove} className="is-isolated">Delete (isolated)</a>
+        </div>
       </div>
     );
   }
@@ -64,7 +69,7 @@ var SimpleSortable = React.createClass({
   },
   render: function() {
     var items = this.state.items.map(function(item, idx) {
-      var style = { border: '1px solid #ddd' };
+      var style = {};
       if (this.props.horizontal) {
         style['display'] = 'inline-block';
       }
@@ -76,9 +81,14 @@ var SimpleSortable = React.createClass({
                    sortData={idx}
                    handleRemoval={this.removeRow} />;
     }.bind(this));
+    /*
+      Notice how we're defining a sensitivity of 0 because our placeholder is a little smaller than our items, so we want
+      to make sure there's enough wiggle room for the placeholder to swap places with a bigger item without causing another
+      re-sort in the opposite direction.
+    */
     return (
       <div>
-        <Sortable onSort={this.handleSort} horizontal={this.props.horizontal}>
+        <Sortable onSort={this.handleSort} horizontal={this.props.horizontal} sensitivity={0}>
           {items}
         </Sortable>
       </div>
