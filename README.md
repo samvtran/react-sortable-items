@@ -4,7 +4,11 @@ Sort stuff with React.js
 Based on [jasonslyvia/react-anything-sortable](https://github.com/jasonslyvia/react-anything-sortable) but without jQuery.
 
 # Usage
+react-sortable-items requires React with addons.
+
 You can install react-sortable-items with `npm i react-sortable-items` and include it using webpack, Browserify, etc. If you're having trouble, Gulpfiles using webpack are included in the examples directory.
+
+If you just want to include the components directly in your pages, files that can be used as `<script>` srcs are included in the `dist` directory.
 
 To run the examples, run `gulp` in the respective example directories and open index.html in your favorite browser.
 

@@ -1,0 +1,21 @@
+{
+  "name": "react-sortable-items",
+  "version": "0.0.4",
+  "homepage": "https://github.com/samvtran/react-sortable-items",
+  "authors": [
+    "Sam Tran <samvtran@gmail.com>"
+  ],
+  "description": "Sort stuff with React.js",
+  "main": "dist/Sortable.js",
+  "keywords": [
+    "react"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

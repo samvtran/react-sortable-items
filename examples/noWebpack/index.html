@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>react-sortable-items Simple Example</title>
+  <style>
+    #Example, #HorizontalExample {
+      margin: 16px;
+    }
+  </style>
+  <link rel="stylesheet" href="../../style.css">
+</head>
+<body>
+  <div id="Example"></div>
+  <div id="HorizontalExample"></div>
+  <script src="http://fb.me/react-with-addons-0.12.2.min.js"></script>
+  <script src="../../dist/Sortable.js"></script>
+  <script src="../../dist/SortableItemMixin.js"></script>
+  <script>
+  'use strict';
+
+  var Item = React.createClass({
+    mixins: [SortableItemMixin],
+    propTypes: {
+      title: React.PropTypes.string.isRequired,
+      handleRemoval: React.PropTypes.func.isRequired,
+      index: React.PropTypes.number.isRequired
+    },
+    getDefaultProps: function() {
+      return {
+        style: { border: '1px solid #ddd' }
+      }
+    },
+    handleRemove: function(e) {
+      e.preventDefault();
+      this.props.handleRemoval(this.props.index);
+    },
+    render: function() {
+      return this.renderWithSortable(
+        React.createElement('div', { style: this.props.style }, [
+          React.createElement('h4', null, this.props.title),
+          React.createElement('a', { href: '#', onClick: this.handleRemove, className: 'is-isolated' }, 'Delete (isolated)')
+        ])
+      );
+    }
+  });
+
+  var SimpleSortable = React.createClass({
+    getDefaultProps: function() {
+      return {
+        horizontal: false
+      }
+    },
+    getInitialState: function() {
+      return {
+        items: [
+          "Item 1",
+          "Item 2",
+          "Item 3",
+          "Item 4",
+          "Item 5"
+        ]
+      }
+    },
+    removeRow: function(idx) {
+      var newItems = this.state.items;
+      newItems.splice(idx, 1);
+      this.setState({
+        items: newItems
+      })
+    },
+    handleSort: function(reorder) {
+      this.setState({
+        items: reorder.map(function (idx) {
+          return this.state.items[idx];
+        }.bind(this))
+      })
+    },
+    render: function() {
+      var items = this.state.items.map(function(item, idx) {
+        var style = { border: '1px solid #ddd' };
+        if (this.props.horizontal) {
+          style['display'] = 'inline-block';
+        }
+        return React.createElement(Item, {
+          key: idx,
+          index: idx,
+          isDraggable: true,
+          title: item,
+          style: style,
+          sortData: idx,
+          handleRemoval: this.removeRow
+        });
+      }.bind(this));
+      return React.createElement("div", null,
+        React.createElement(Sortable, { onSort: this.handleSort, horizontal: this.props.horizontal }, items)
+      );
+    }
+  });
+
+  React.render(React.createElement(SimpleSortable), document.getElementById('Example'));
+  React.render(React.createElement(SimpleSortable, { horizontal: true }), document.getElementById('HorizontalExample'));
+
+  </script>
+</body>
+</html>

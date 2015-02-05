@@ -1,6 +1,6 @@
 {
   "name": "react-sortable-items",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Sort stuff with React.js",
   "main": "Sortable.js",
   "scripts": {
@@ -22,7 +22,10 @@
   "devDependencies": {
     "css-loader": "^0.9.1",
     "del": "^1.1.1",
+    "extend": "^2.0.0",
     "gulp": "^3.8.10",
+    "gulp-react": "^2.0.0",
+    "gulp-rename": "^1.2.0",
     "gulp-webpack": "^1.2.0",
     "immutable": "^3.6.2",
     "jsx-loader": "^0.12.2",

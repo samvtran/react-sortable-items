@@ -326,9 +326,9 @@ module.exports = React.createClass({
   },
   render: function(){
     return (
-      React.createElement("div", {className: "Sortable", ref: "movable"}, 
-        this.renderItems()
-      )
+      <div className="Sortable" ref="movable">
+        {this.renderItems()}
+      </div>
     );
   }
 });
