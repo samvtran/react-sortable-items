@@ -8,7 +8,7 @@ react-sortable-items requires React with addons.
 
 You can install react-sortable-items with `npm i react-sortable-items` and include it using webpack, Browserify, etc. If you're having trouble, Gulpfiles using webpack are included in the examples directory.
 
-If you just want to include the components directly in your pages, files that can be used as `<script>` srcs are included in the `dist` directory.
+If you just want to include the components directly in your pages, files that can be used with script tags are included in the `dist` directory. Both `Sortable{.min}.js` and `SortableItemMixin{.min}.js` expose the `Sortable` and `SortableItemMixin` global vars for use by your React components.
 
 To run the examples, run `gulp` in the respective example directories and open index.html in your favorite browser.
 
@@ -78,11 +78,19 @@ Property | Description
 -----|-----------
 isDraggable | Default true. Whether the item can be dragged.
 sortData | Any data added here will be sent to the `onSort` callback on Sortable in the correct re-sorted order.
-style | Send any inline styles to the final component
+
 
 Additionally, sortable items can define a `getPlaceholderContent()` function (example in the "simple" example directory) that will replace the placeholder for the item being dragged with whatever component you return.
 
-The `is-isolated` class can also be set on any elements inside a sortable item to prevent them from accidentally triggering a sort.
+Styles for elements:
+
+Class | Description
+------|------------
+`.Sortable` | Class for the Sortable component.
+`.SortableItem` | Class for each sortable item.
+`.SortableItem.is-dragging` | Set on the item currently being dragged.
+`.SortableItem.is-placeholder` | Set on the placeholder item in the list.
+`.is-isolated` | A class you can set on any element inside a sortable item to prevent it from triggering a sort on click.
 
 # TODO
 - [x] Horizontal sorting

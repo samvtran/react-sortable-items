@@ -69,8 +69,6 @@ module.exports = React.createClass({
   },
   componentDidMount: function(){
     this._dragDimensions = null;
-    this.containerWidth = this.getDOMNode().offsetWidth;
-    this.containerHeight = this.getDOMNode().offsetHeight;
   },
   componentWillUnmount: function() {
     this.unbindEvent();
@@ -84,6 +82,8 @@ module.exports = React.createClass({
     document.removeEventListener('mouseup', this.handleMouseUp);
   },
   handleMouseDown: function(e, index){
+    this.containerWidth = this.getDOMNode().offsetWidth;
+    this.containerHeight = this.getDOMNode().offsetHeight;
     this._draggingIndex = index;
     this._prevX = e.pageX;
     this._prevY = e.pageY;

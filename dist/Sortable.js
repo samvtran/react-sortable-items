@@ -116,8 +116,6 @@ var Sortable =
 	  },
 	  componentDidMount: function(){
 	    this._dragDimensions = null;
-	    this.containerWidth = this.getDOMNode().offsetWidth;
-	    this.containerHeight = this.getDOMNode().offsetHeight;
 	  },
 	  componentWillUnmount: function() {
 	    this.unbindEvent();
@@ -131,6 +129,8 @@ var Sortable =
 	    document.removeEventListener('mouseup', this.handleMouseUp);
 	  },
 	  handleMouseDown: function(e, index){
+	    this.containerWidth = this.getDOMNode().offsetWidth;
+	    this.containerHeight = this.getDOMNode().offsetHeight;
 	    this._draggingIndex = index;
 	    this._prevX = e.pageX;
 	    this._prevY = e.pageY;
