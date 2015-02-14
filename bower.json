@@ -10,9 +10,9 @@
   "keywords": [
     "react"
   ],
-  "dependencies": [
+  "dependencies": {
     "react": "~0.12.2"
-  ],
+  },
   "license": "MIT",
   "ignore": [
     "**/.*",
