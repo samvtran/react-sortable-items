@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require('react/addons');
-var cx = React.addons.classSet;
+var cx = require('classnames');
 
 /**
  * Elements with 'is-isolated' in the class list will not trigger on mouse down events.

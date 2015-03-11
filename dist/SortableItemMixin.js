@@ -49,7 +49,7 @@ var SortableItemMixin =
 	'use strict';
 
 	var React = __webpack_require__(1);
-	var cx = React.addons.classSet;
+	var cx = __webpack_require__(2);
 
 	/**
 	 * Elements with 'is-isolated' in the class list will not trigger on mouse down events.
@@ -123,6 +123,40 @@ var SortableItemMixin =
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = React;
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	function classNames() {
+		var args = arguments;
+		var classes = [];
+
+		for (var i = 0; i < args.length; i++) {
+			var arg = args[i];
+			if (!arg) {
+				continue;
+			}
+
+			if ('string' === typeof arg || 'number' === typeof arg) {
+				classes.push(arg);
+			} else if ('object' === typeof arg) {
+				for (var key in arg) {
+					if (!arg.hasOwnProperty(key) || !arg[key]) {
+						continue;
+					}
+					classes.push(key);
+				}
+			}
+		}
+		return classes.join(' ');
+	}
+
+	// safely export classNames in case the script is included directly on a page
+	if (typeof module !== 'undefined' && module.exports) {
+		module.exports = classNames;
+	}
+
 
 /***/ }
 /******/ ])

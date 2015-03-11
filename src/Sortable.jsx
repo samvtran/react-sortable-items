@@ -2,7 +2,7 @@
 'use strict';
 
 var React = require('react/addons');
-var cx = React.addons.classSet;
+var cx = require('classnames');
 var CloneWithProps = React.addons.cloneWithProps;
 
 module.exports = React.createClass({
