@@ -1,6 +1,6 @@
 {
   "name": "react-sortable-items",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Sort stuff with React.js",
   "main": "Sortable.js",
   "scripts": {
@@ -24,13 +24,13 @@
     "css-loader": "^0.9.1",
     "del": "^1.1.1",
     "extend": "^2.0.0",
-    "gulp": "^3.8.10",
+    "gulp": "^3.8.11",
     "gulp-react": "^2.0.0",
     "gulp-rename": "^1.2.0",
     "gulp-webpack": "^1.2.0",
     "immutable": "^3.6.2",
     "jsx-loader": "^0.12.2",
-    "react": "^0.13.0",
+    "react": "^0.13.1",
     "reflux": "^0.2.4",
     "style-loader": "^0.8.3",
     "webpack": "^1.5.3"
