@@ -74,6 +74,7 @@ var SortableItemMixin =
 	    };
 	    if (!e.target.classList.contains('is-isolated') && this.props.isDraggable) {
 	      this.props.onSortableItemMouseDown(evt, this.props.sortableIndex);
+	      e.stopPropagation();
 	    }
 	  },
 	  outerHeight: function() {
