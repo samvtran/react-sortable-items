@@ -25,7 +25,8 @@ module.exports = React.createClass({
       See sinkUndraggables. This won't allow sorting above undraggable items.
       This defers to sinkUndraggables if both are set to true.
     */
-    floatUndraggables: React.PropTypes.bool
+    floatUndraggables: React.PropTypes.bool,
+    minDragDistance: React.PropTypes.number
   },
   getDefaultProps: function() {
     return {
@@ -33,6 +34,7 @@ module.exports = React.createClass({
       horizontal: false,
       sinkUndraggables: false,
       sensitivity: 0,
+      minDragDistance: 0
     }
   },
   getInitialState: function() {
@@ -98,16 +100,21 @@ module.exports = React.createClass({
       top: newOffset.top,
       left: newOffset.left
     };
+    var deltaX = newOffset.left - this._initOffset.left;
+    var deltaY = newOffset.top - this._initOffset.top;
+    var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+    if(distance > this.props.minDragDistance) {        
+        if (newIndex !== -1) {
+          this._draggingIndex = newIndex;
+          newState['placeHolderIndex'] = newIndex;
+        }
 
-    if (newIndex !== -1) {
-      this._draggingIndex = newIndex;
-      newState['placeHolderIndex'] = newIndex;
+        this.setState(newState);
+        
+        this._prevX = e.pageX;
+        this._prevY = e.pageY;
     }
-
-    this.setState(newState);
-
-    this._prevX = e.pageX;
-    this._prevY = e.pageY;
+    
   },
   handleMouseUp: function(e){
     this.unbindEvent();
