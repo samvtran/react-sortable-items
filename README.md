@@ -70,7 +70,7 @@ horizontal | Default false. Whether to sort horizontally.
 floatUndraggables | Default false. Whether to only allow sorting below items with isDraggable set to false, sending undraggable items to the top of the list over time.
 sinkUndraggables | Default false. Whether to only allow sorting above items with isDraggable set to false, sending undraggable items to the bottom of the list over time.
 sensitivity | Default 1. A value 0-1 (0 for least sensitive, 1 for most) that will be used to determine the sensitivity of sorting. The smaller the number, the further from the center of an element you can drag before the list re-sorts. This is especially useful when you replace the placeholder contents with something at a smaller width or height than the sortable items in a horizontal or vertically sorted list respectively.
-
+minDragDistance | Default 0. A value in pixels that the mouse can be moved after clicking before a drag starts.
 
 On components with `SortableItemMixin`:
 
