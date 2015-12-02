@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react/addons');
+var ReactDOM = require('react-dom');
 var cx = require('classnames');
 var CloneWithProps = React.cloneElement;
 
@@ -83,8 +84,8 @@ module.exports = React.createClass({
     document.removeEventListener('mouseup', this.handleMouseUp);
   },
   handleMouseDown: function(e, index){
-    this.containerWidth = this.getDOMNode().offsetWidth;
-    this.containerHeight = this.getDOMNode().offsetHeight;
+    this.containerWidth = ReactDOM.findDOMNode(this).offsetWidth;
+    this.containerHeight = ReactDOM.findDOMNode(this).offsetHeight;
     this._draggingIndex = index;
     this._prevX = e.pageX;
     this._prevY = e.pageY;
@@ -247,8 +248,8 @@ module.exports = React.createClass({
   },
   getPosition: function() {
     return {
-      left: this.getDOMNode().offsetLeft,
-      top: this.getDOMNode().offsetTop
+      left: ReactDOM.findDOMNode(this).offsetLeft,
+      top: ReactDOM.findDOMNode(this).offsetTop
     }
   },
   closest: function(element, f) {

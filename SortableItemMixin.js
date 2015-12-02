@@ -30,19 +30,19 @@ module.exports = {
     }
   },
   outerHeight: function() {
-    var element = this.getDOMNode();
+    var element = ReactDOM.findDOMNode(this);
     var style = getComputedStyle(element);
     return element.offsetHeight + parseInt(style.marginTop) + parseInt(style.marginBottom);
   },
   outerWidth: function() {
-    var element = this.getDOMNode();
+    var element = ReactDOM.findDOMNode(this);
     var style = getComputedStyle(element);
     return element.offsetWidth + parseInt(style.marginLeft) + parseInt(style.marginRight);
   },
   getPosition: function() {
     return {
-      left: this.getDOMNode().offsetLeft,
-      top: this.getDOMNode().offsetTop
+      left: ReactDOM.findDOMNode(this).offsetLeft,
+      top: ReactDOM.findDOMNode(this).offsetTop
     }
   },
   componentDidMount: function(){

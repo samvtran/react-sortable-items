@@ -34,5 +34,8 @@
     "reflux": "^0.2.4",
     "style-loader": "^0.8.3",
     "webpack": "^1.5.3"
+  },
+  "dependencies": {
+    "react-dom": "^0.14.3"
   }
 }
