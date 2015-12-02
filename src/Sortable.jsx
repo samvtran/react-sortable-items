@@ -1,7 +1,8 @@
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
 var ReactDOM = require('react-dom');
+var ReactUpdate = require('react-addons-update');
 var cx = require('classnames');
 var CloneWithProps = React.cloneElement;
 
@@ -140,7 +141,7 @@ module.exports = React.createClass({
   },
 
   handleChildUpdate: function(offset, width, height, index){
-    this._dimensionArr[index] = React.addons.update(this._dimensionArr[index], {
+    this._dimensionArr[index] = ReactUpdate(this._dimensionArr[index], {
       top: { $set: offset.top },
       left: { $set: offset.left },
       width: { $set: width },
