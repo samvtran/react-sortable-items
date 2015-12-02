@@ -30,7 +30,7 @@
     "gulp-webpack": "^1.2.0",
     "immutable": "^3.6.2",
     "jsx-loader": "^0.12.2",
-    "react": "^0.13.1",
+    "react": "^0.14.3",
     "reflux": "^0.2.4",
     "style-loader": "^0.8.3",
     "webpack": "^1.5.3"

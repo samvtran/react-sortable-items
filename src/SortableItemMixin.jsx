@@ -58,7 +58,7 @@ module.exports = {
       'is-undraggable': !this.props.isDraggable,
       'is-placeholder': this.props._isPlaceholder
     });
-    return React.addons.cloneWithProps(
+    return React.cloneElement(
       this.props._isPlaceholder && this.getPlaceholderContent && Object.prototype.toString.call(this.getPlaceholderContent) === '[object Function]'
         ? this.getPlaceholderContent() : item, {
       className: classNames,

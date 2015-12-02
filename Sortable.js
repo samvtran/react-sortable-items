@@ -2,7 +2,7 @@
 
 var React = require('react/addons');
 var cx = require('classnames');
-var CloneWithProps = React.addons.cloneWithProps;
+var CloneWithProps = React.cloneElement;
 
 module.exports = React.createClass({
   displayName: 'Sortable',
@@ -103,18 +103,18 @@ module.exports = React.createClass({
     var deltaX = newOffset.left - this._initOffset.left;
     var deltaY = newOffset.top - this._initOffset.top;
     var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-    if(distance > this.props.minDragDistance) {        
+    if(distance > this.props.minDragDistance) {
         if (newIndex !== -1) {
           this._draggingIndex = newIndex;
           newState['placeHolderIndex'] = newIndex;
         }
 
         this.setState(newState);
-        
+
         this._prevX = e.pageX;
         this._prevY = e.pageY;
     }
-    
+
   },
   handleMouseUp: function(e){
     this.unbindEvent();
@@ -346,7 +346,7 @@ module.exports = React.createClass({
   },
   render: function(){
     return (
-      React.createElement("div", {className: "Sortable", ref: "movable"}, 
+      React.createElement("div", {className: "Sortable", ref: "movable"},
         this.renderItems()
       )
     );
