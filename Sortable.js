@@ -1,6 +1,8 @@
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
+var ReactUpdate = require('react-addons-update');
 var cx = require('classnames');
 var CloneWithProps = React.cloneElement;
 
@@ -83,8 +85,8 @@ module.exports = React.createClass({
     document.removeEventListener('mouseup', this.handleMouseUp);
   },
   handleMouseDown: function(e, index){
-    this.containerWidth = this.getDOMNode().offsetWidth;
-    this.containerHeight = this.getDOMNode().offsetHeight;
+    this.containerWidth = ReactDOM.findDOMNode(this).offsetWidth;
+    this.containerHeight = ReactDOM.findDOMNode(this).offsetHeight;
     this._draggingIndex = index;
     this._prevX = e.pageX;
     this._prevY = e.pageY;
@@ -139,7 +141,7 @@ module.exports = React.createClass({
   },
 
   handleChildUpdate: function(offset, width, height, index){
-    this._dimensionArr[index] = React.addons.update(this._dimensionArr[index], {
+    this._dimensionArr[index] = ReactUpdate(this._dimensionArr[index], {
       top: { $set: offset.top },
       left: { $set: offset.left },
       width: { $set: width },
@@ -247,8 +249,8 @@ module.exports = React.createClass({
   },
   getPosition: function() {
     return {
-      left: this.getDOMNode().offsetLeft,
-      top: this.getDOMNode().offsetTop
+      left: ReactDOM.findDOMNode(this).offsetLeft,
+      top: ReactDOM.findDOMNode(this).offsetTop
     }
   },
   closest: function(element, f) {
@@ -346,7 +348,7 @@ module.exports = React.createClass({
   },
   render: function(){
     return (
-      React.createElement("div", {className: "Sortable", ref: "movable"},
+      React.createElement("div", {className: "Sortable", ref: "movable"}, 
         this.renderItems()
       )
     );
