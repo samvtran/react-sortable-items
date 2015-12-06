@@ -3,6 +3,7 @@
 var Sortable = require('react-sortable-items');
 var sortableMixin = require('react-sortable-items/SortableItemMixin');
 var React = require('react');
+var ReactDOM = require('react-dom');
 var style = require('react-sortable-items/style.css');
 
 var Item = React.createClass({
@@ -89,5 +90,5 @@ var SimpleSortable = React.createClass({
   }
 });
 
-React.render(<SimpleSortable sinkUndraggables={true} />, document.getElementById('Example'));
-React.render(<SimpleSortable floatUndraggables={true} />, document.getElementById('HorizontalExample'));
+ReactDOM.render(<SimpleSortable sinkUndraggables={true} />, document.getElementById('Example'));
+ReactDOM.render(<SimpleSortable floatUndraggables={true} />, document.getElementById('HorizontalExample'));

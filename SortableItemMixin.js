@@ -1,6 +1,7 @@
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
 var cx = require('classnames');
 
 /**
@@ -30,19 +31,19 @@ module.exports = {
     }
   },
   outerHeight: function() {
-    var element = this.getDOMNode();
+    var element = ReactDOM.findDOMNode(this);
     var style = getComputedStyle(element);
     return element.offsetHeight + parseInt(style.marginTop) + parseInt(style.marginBottom);
   },
   outerWidth: function() {
-    var element = this.getDOMNode();
+    var element = ReactDOM.findDOMNode(this);
     var style = getComputedStyle(element);
     return element.offsetWidth + parseInt(style.marginLeft) + parseInt(style.marginRight);
   },
   getPosition: function() {
     return {
-      left: this.getDOMNode().offsetLeft,
-      top: this.getDOMNode().offsetTop
+      left: ReactDOM.findDOMNode(this).offsetLeft,
+      top: ReactDOM.findDOMNode(this).offsetTop
     }
   },
   componentDidMount: function(){
@@ -58,7 +59,7 @@ module.exports = {
       'is-undraggable': !this.props.isDraggable,
       'is-placeholder': this.props._isPlaceholder
     });
-    return React.addons.cloneWithProps(
+    return React.cloneElement(
       this.props._isPlaceholder && this.getPlaceholderContent && Object.prototype.toString.call(this.getPlaceholderContent) === '[object Function]'
         ? this.getPlaceholderContent() : item, {
       className: classNames,

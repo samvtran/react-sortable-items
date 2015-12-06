@@ -1,8 +1,10 @@
 'use strict';
 
-var React = require('react/addons');
+var React = require('react');
+var ReactDOM = require('react-dom');
+var ReactUpdate = require('react-addons-update');
 var cx = require('classnames');
-var CloneWithProps = React.addons.cloneWithProps;
+var CloneWithProps = React.cloneElement;
 
 module.exports = React.createClass({
   displayName: 'Sortable',
@@ -83,8 +85,8 @@ module.exports = React.createClass({
     document.removeEventListener('mouseup', this.handleMouseUp);
   },
   handleMouseDown: function(e, index){
-    this.containerWidth = this.getDOMNode().offsetWidth;
-    this.containerHeight = this.getDOMNode().offsetHeight;
+    this.containerWidth = ReactDOM.findDOMNode(this).offsetWidth;
+    this.containerHeight = ReactDOM.findDOMNode(this).offsetHeight;
     this._draggingIndex = index;
     this._prevX = e.pageX;
     this._prevY = e.pageY;
@@ -103,18 +105,18 @@ module.exports = React.createClass({
     var deltaX = newOffset.left - this._initOffset.left;
     var deltaY = newOffset.top - this._initOffset.top;
     var distance = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-    if(distance > this.props.minDragDistance) {        
+    if(distance > this.props.minDragDistance) {
         if (newIndex !== -1) {
           this._draggingIndex = newIndex;
           newState['placeHolderIndex'] = newIndex;
         }
 
         this.setState(newState);
-        
+
         this._prevX = e.pageX;
         this._prevY = e.pageY;
     }
-    
+
   },
   handleMouseUp: function(e){
     this.unbindEvent();
@@ -139,7 +141,7 @@ module.exports = React.createClass({
   },
 
   handleChildUpdate: function(offset, width, height, index){
-    this._dimensionArr[index] = React.addons.update(this._dimensionArr[index], {
+    this._dimensionArr[index] = ReactUpdate(this._dimensionArr[index], {
       top: { $set: offset.top },
       left: { $set: offset.left },
       width: { $set: width },
@@ -247,8 +249,8 @@ module.exports = React.createClass({
   },
   getPosition: function() {
     return {
-      left: this.getDOMNode().offsetLeft,
-      top: this.getDOMNode().offsetTop
+      left: ReactDOM.findDOMNode(this).offsetLeft,
+      top: ReactDOM.findDOMNode(this).offsetTop
     }
   },
   closest: function(element, f) {
