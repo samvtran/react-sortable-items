@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/samvtran/react-sortable-items",
   "devDependencies": {
-    "classnames": "^1.1.4",
     "css-loader": "^0.9.1",
     "del": "^1.1.1",
     "extend": "^2.0.0",
@@ -36,6 +35,7 @@
     "webpack": "^1.5.3"
   },
   "dependencies": {
+    "classnames": "^1.1.4",
     "react-addons-update": "^0.14.3",
     "react-dom": "^0.14.3"
   }
